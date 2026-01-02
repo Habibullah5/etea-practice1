@@ -1,62 +1,139 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Test</title>
-<style>
-body { font-family: Arial; text-align: center; }
-button { padding: 15px; margin: 10px; width: 250px; font-size: 18px; }
-</style>
+  <title>ETEA Test</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #f4f6f8;
+      padding: 20px;
+    }
+
+    .question-box {
+      background: white;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
+
+    .question {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .options button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      background: #f9f9f9;
+    }
+
+    .options button.selected {
+      background: #cce5ff;
+      border-color: #004085;
+    }
+
+    #submitBtn {
+      padding: 15px;
+      font-size: 18px;
+      width: 100%;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
 
-<h3 id="qno"></h3>
-<h2 id="question"></h2>
-<div id="options"></div>
+<h2 style="text-align:center;">ETEA Practice Test (10 Questions)</h2>
+
+<div id="testArea"></div>
+
+<button id="submitBtn" onclick="submitTest()">Submit Test</button>
+
 <script>
-let questions = [
+// 🔹 Question Bank (Add up to 100)
+let allQuestions = [
   { q:"Capital of Pakistan?", o:["Lahore","Islamabad","Karachi","Peshawar"], c:1 },
   { q:"2 + 2 = ?", o:["3","4","5","6"], c:1 },
-  { q:"Largest province of Pakistan?", o:["Sindh","Punjab","Balochistan","KP"], c:2 },
   { q:"Founder of Pakistan?", o:["Allama Iqbal","Liaquat Ali","Quaid-e-Azam","Sir Syed"], c:2 },
+  { q:"Largest province by area?", o:["Punjab","Sindh","KP","Balochistan"], c:3 },
+  { q:"Currency of Pakistan?", o:["Riyal","Taka","Rupee","Dollar"], c:2 },
+  { q:"Independence year of Pakistan?", o:["1945","1946","1947","1948"], c:2 },
+  { q:"Minar-e-Pakistan is in?", o:["Karachi","Lahore","Islamabad","Multan"], c:1 },
+  { q:"National language of Pakistan?", o:["English","Punjabi","Urdu","Pashto"], c:2 },
+  { q:"K2 is located in?", o:["Punjab","Sindh","KP","Gilgit"], c:3 },
+  { q:"Largest ocean?", o:["Indian","Pacific","Atlantic","Arctic"], c:1 },
 
-  // 👉 ADD UP TO 100 QUESTIONS
+  // 👉 Add up to 100
 ];
 
-// 🔀 RANDOMIZE & PICK 10
-questions.sort(() => 0.5 - Math.random());
-questions = questions.slice(0, 10);
+// 🔀 Random 10
+allQuestions.sort(() => 0.5 - Math.random());
+let questions = allQuestions.slice(0, 10);
 
-let i = 0;
-let score = 0;
+// Store answers
+let answers = new Array(questions.length).fill(null);
 
-function loadQuestion() {
-  qno.innerText = "Question " + (i+1) + " / " + questions.length;
-  question.innerText = questions[i].q;
+// Render questions
+const testArea = document.getElementById("testArea");
 
-  options.innerHTML = "";
-  questions[i].o.forEach((opt, index) => {
-    options.innerHTML += `
-      <button onclick="answer(${index})">${opt}</button><br>
+questions.forEach((q, qi) => {
+  let div = document.createElement("div");
+  div.className = "question-box";
+
+  let html = `<div class="question">Q${qi+1}. ${q.q}</div><div class="options">`;
+
+  q.o.forEach((opt, oi) => {
+    html += `
+      <button id="q${qi}o${oi}" onclick="selectAnswer(${qi}, ${oi})">
+        ${opt}
+      </button>
     `;
   });
+
+  html += `</div>`;
+  div.innerHTML = html;
+  testArea.appendChild(div);
+});
+
+// Select answer
+function selectAnswer(qIndex, oIndex) {
+  answers[qIndex] = oIndex;
+
+  // remove previous selection
+  questions[qIndex].o.forEach((_, i) => {
+    document.getElementById(`q${qIndex}o${i}`).classList.remove("selected");
+  });
+
+  // highlight selected
+  document.getElementById(`q${qIndex}o${oIndex}`).classList.add("selected");
 }
 
-function answer(selected) {
-  if (selected === questions[i].c) score++;
-  i++;
+// Submit test
+function submitTest() {
+  let score = 0;
 
-  if (i < questions.length) {
-    loadQuestion();
-  } else {
-    localStorage.setItem("score", score);
-    localStorage.setItem("total", questions.length);
-    window.location.href = "result.html";
-  }
+  answers.forEach((ans, i) => {
+    if (ans === questions[i].c) score++;
+  });
+
+  localStorage.setItem("score", score);
+  localStorage.setItem("total", questions.length);
+  window.location.href = "result.html";
 }
-
-loadQuestion();
 </script>
-
 
 </body>
 </html>
+
+
