@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Result</title>
+<style>
+body { font-family: Arial; text-align: center; }
+</style>
+</head>
+<body>
+
+<h2>Final Result</h2>
+
+<script>
+const name = localStorage.getItem("studentName");
+const roll = localStorage.getItem("rollNo");
+const score = localStorage.getItem("score");
+
+document.write(`
+  <h3>Name: ${name}</h3>
+  <h3>Roll No: ${roll}</h3>
+  <h2>Score: ${score} / 100</h2>
+`);
+</script>
+
+</body>
+</html>

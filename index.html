@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>ETEA Practice Test</title>
+<style>
+body { font-family: Arial; text-align: center; }
+input, button { padding: 10px; font-size: 18px; margin: 8px; }
+</style>
+</head>
+<body>
+
+<h2>ETEA Practice Test</h2>
+
+<input id="name" placeholder="Student Name"><br>
+<input id="roll" placeholder="Roll Number"><br>
+
+<button onclick="startTest()">Start Test</button>
+
+<script>
+function startTest() {
+  localStorage.setItem("studentName", name.value);
+  localStorage.setItem("rollNo", roll.value);
+  window.location.href = "test.html";
+}
+</script>
+
+</body>
+</html>
